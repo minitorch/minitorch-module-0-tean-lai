@@ -9,7 +9,7 @@ from minitorch import MathTest
 import minitorch
 from minitorch.operators import (
     add,
-    # addLists,
+    addLists,
     eq,
     id,
     inv,
@@ -20,8 +20,8 @@ from minitorch.operators import (
     mul,
     neg,
     is_close,
-    # negList,
-    # prod,
+    negList,
+    prod,
     relu,
     relu_back,
     sigmoid,
@@ -153,7 +153,7 @@ def test_distribute() -> None:
     n_times = 200
     for _ in range(200):
         x, y, z = gen_num(), gen_num(), gen_num()
-        assert is_close(mul(z, add(x, y)), add(mul(z, x), mul(z, y)))
+        assert_close(mul(z, add(x, y)), add(mul(z, x), mul(z, y)))
 
     # raise NotImplementedError("Need to implement for Task 0.2")
 
@@ -190,8 +190,7 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     """Write a test that ensures that the sum of `ls1` plus the sum of `ls2`
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    assert_close(add(sum(ls1), sum(ls2)), sum(addLists(ls1, ls2)))
 
 
 @pytest.mark.task0_3

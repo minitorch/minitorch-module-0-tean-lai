@@ -121,3 +121,39 @@ def relu_back(x: float, y: float):
 
 
 # TODO: Implement for Task 0.3.
+def map(f: Callable, seq: Iterable):
+    for i in seq:
+        yield f(i)
+
+
+def zipWith(f: Callable, seq1: Iterable, seq2: Iterable):
+    for x, y in zip(seq1, seq2):
+        yield f(x, y)
+
+
+def reduce(f: Callable[[float, float], float], seq: Iterable[float]) -> float:
+    acc = None
+    for i in seq:
+        if acc is None:
+            acc = i
+        else:
+            acc = f(i, acc)
+    if acc is None:
+        return 0.0
+    return acc
+
+
+def negList(l: list[float]):
+    return map(neg, l)
+
+
+def addLists(l1: list[float], l2: list[float]):
+    return zipWith(add, l1, l2)
+
+
+def sum(l: list[float]):
+    return reduce(add, l)
+
+
+def prod(l: list[float]) -> float:
+    return reduce(mul, l)
