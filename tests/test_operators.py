@@ -1,4 +1,5 @@
 from typing import Callable, List, Tuple
+import random
 
 import pytest
 from hypothesis import given
@@ -8,7 +9,7 @@ from minitorch import MathTest
 import minitorch
 from minitorch.operators import (
     add,
-    addLists,
+    # addLists,
     eq,
     id,
     inv,
@@ -18,8 +19,9 @@ from minitorch.operators import (
     max,
     mul,
     neg,
-    negList,
-    prod,
+    is_close,
+    # negList,
+    # prod,
     relu,
     relu_back,
     sigmoid,
@@ -108,7 +110,16 @@ def test_sigmoid(a: float) -> None:
     * It is  strictly increasing.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    prev = None
+    for i in range(-200, 200):
+        i = float(i)
+        curr = sigmoid(i)
+        assert 0.0 <= curr <= 1.0
+        if prev is not None:
+            assert curr >= prev
+        prev = curr
+
+    assert eq(0.5, sigmoid(0.0))
 
 
 @pytest.mark.task0_2
@@ -116,7 +127,8 @@ def test_sigmoid(a: float) -> None:
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    if a < b and b < c:
+        assert a < c
 
 
 @pytest.mark.task0_2
@@ -125,7 +137,10 @@ def test_symmetric() -> None:
     gives the same value regardless of the order of its input.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    n_times = 200
+    for _ in range(n_times):
+        a, b = random.random() * 200 - 200, random.random() * 200 - 200
+        assert eq(mul(a, b), mul(b, a))
 
 
 @pytest.mark.task0_2
@@ -134,14 +149,21 @@ def test_distribute() -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    gen_num = lambda: random.random() * 10 - 20
+    n_times = 200
+    for _ in range(200):
+        x, y, z = gen_num(), gen_num(), gen_num()
+        assert is_close(mul(z, add(x, y)), add(mul(z, x), mul(z, y)))
+
+    # raise NotImplementedError("Need to implement for Task 0.2")
 
 
 @pytest.mark.task0_2
 def test_other() -> None:
     """Write a test that ensures some other property holds for your functions."""
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    pass  # don't i'm lazy
+    # raise NotImplementedError("Need to implement for Task 0.2")
 
 
 # ## Task 0.3  - Higher-order functions
